@@ -1,0 +1,707 @@
+:Public-Key Algorithms:
+
+      ID           Algorithm
+      --           ---------
+      1          - RSA (Encrypt or Sign) [HAC]
+      2          - RSA Encrypt-Only [HAC]
+      3          - RSA Sign-Only [HAC]
+      16         - Elgamal (Encrypt-Only) [ELGAMAL] [HAC]
+      17         - DSA (Digital Signature Algorithm) [FIPS186] [HAC]
+      18         - Reserved for Elliptic Curve
+      19         - Reserved for ECDSA
+      20         - Reserved (formerly Elgamal Encrypt or Sign)
+      21         - Reserved for Diffie-Hellman (X9.42 as defined for IETF-S/MIME)
+      100 to 110 - Private/Experimental algorithm
+
+Implementations MUST implement DSA for signatures, and Elgamal for
+   encryption.  Implementations SHOULD implement RSA keys (1).  RSA
+   Encrypt-Only (2) and RSA Sign-Only are deprecated and SHOULD NOT be
+   generated, but may be interpreted.  See Section 13.5.  See Section
+   13.8 for notes on Elliptic Curve (18), ECDSA (19), Elgamal Encrypt or
+   Sign (20), and X9.42 (21).  Implementations MAY implement any other
+   algorithm.
+
+:Symmetric-Key Algorithms:
+
+       ID           Algorithm
+       --           ---------
+       0          - Plaintext or unencrypted data
+       1          - IDEA [IDEA]
+       2          - TripleDES (DES-EDE, [SCHNEIER] [HAC] -
+                    168 bit key derived from 192)
+       3          - CAST5 (128 bit key, as per [RFC2144])
+       4          - Blowfish (128 bit key, 16 rounds) [BLOWFISH]
+       5          - Reserved
+       6          - Reserved
+       7          - AES with 128-bit key [AES]
+       8          - AES with 192-bit key
+       9          - AES with 256-bit key
+       10         - Twofish with 256-bit key [TWOFISH]
+       100 to 110 - Private/Experimental algorithm
+
+   Implementations MUST implement TripleDES.  Implementations SHOULD
+   implement AES-128 and CAST5.  Implementations that interoperate with
+
+
+
+
+Callas, et al               Standards Track                    [Page 62]
+RFC 4880                 OpenPGP Message Format            November 2007
+
+
+   PGP 2.6 or earlier need to support IDEA, as that is the only
+   symmetric cipher those versions use.  Implementations MAY implement
+   any other algorithm.
+
+9.3.  Compression Algorithms
+
+       ID           Algorithm
+       --           ---------
+       0          - Uncompressed
+       1          - ZIP [RFC1951]
+       2          - ZLIB [RFC1950]
+       3          - BZip2 [BZ2]
+       100 to 110 - Private/Experimental algorithm
+
+   Implementations MUST implement uncompressed data.  Implementations
+   SHOULD implement ZIP.  Implementations MAY implement any other
+   algorithm.
+
+9.4.  Hash Algorithms
+
+      ID           Algorithm                             Text Name
+      --           ---------                             ---------
+      1          - MD5 [HAC]                             "MD5"
+      2          - SHA-1 [FIPS180]                       "SHA1"
+      3          - RIPE-MD/160 [HAC]                     "RIPEMD160"
+      4          - Reserved
+      5          - Reserved
+      6          - Reserved
+      7          - Reserved
+      8          - SHA256 [FIPS180]                      "SHA256"
+      9          - SHA384 [FIPS180]                      "SHA384"
+      10         - SHA512 [FIPS180]                      "SHA512"
+      11         - SHA224 [FIPS180]                      "SHA224"
+      100 to 110 - Private/Experimental algorithm
+
+   Implementations MUST implement SHA-1.  Implementations MAY implement
+   other algorithms.  MD5 is deprecated.
+
+    - MD5:        0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x02, 0x05
+
+     - RIPEMD-160: 0x2B, 0x24, 0x03, 0x02, 0x01
+
+     - SHA-1:      0x2B, 0x0E, 0x03, 0x02, 0x1A
+
+     - SHA224:     0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x04
+
+     - SHA256:     0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01
+
+     - SHA384:     0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02
+
+
+
+Callas, et al               Standards Track                    [Page 22]
+RFC 4880                 OpenPGP Message Format            November 2007
+
+
+     - SHA512:     0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03
+
+   :The ASN.1 Object Identifiers (OIDs) are as follows:
+
+     - MD5:        1.2.840.113549.2.5
+
+     - RIPEMD-160: 1.3.36.3.2.1
+
+     - SHA-1:      1.3.14.3.2.26
+
+     - SHA224:     2.16.840.1.101.3.4.2.4
+
+     - SHA256:     2.16.840.1.101.3.4.2.1
+
+     - SHA384:     2.16.840.1.101.3.4.2.2
+
+     - SHA512:     2.16.840.1.101.3.4.2.3
+
+  : The full hash prefixes for these are as follows:
+
+       MD5:        0x30, 0x20, 0x30, 0x0C, 0x06, 0x08, 0x2A, 0x86,
+                   0x48, 0x86, 0xF7, 0x0D, 0x02, 0x05, 0x05, 0x00,
+                   0x04, 0x10
+
+       RIPEMD-160: 0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2B, 0x24,
+                   0x03, 0x02, 0x01, 0x05, 0x00, 0x04, 0x14
+
+       SHA-1:      0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2b, 0x0E,
+                   0x03, 0x02, 0x1A, 0x05, 0x00, 0x04, 0x14
+
+       SHA224:     0x30, 0x31, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86,
+                   0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x04, 0x05,
+                   0x00, 0x04, 0x1C
+
+       SHA256:     0x30, 0x31, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86,
+                   0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x05,
+                   0x00, 0x04, 0x20
+
+       SHA384:     0x30, 0x41, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86,
+                   0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02, 0x05,
+                   0x00, 0x04, 0x30
+
+       SHA512:     0x30, 0x51, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86,
+                   0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, 0x05,
+                   0x00, 0x04, 0x40
+   ```tts
+   Input data:  0x14FB9C03D97E 
+   Hex:     1   4    F   B    9   C     | 0   3    D   9    7   E
+   8-bit:   00010100 11111011 10011100  | 00000011 11011001 11111110
+   
+   6-bit:   000101 001111 101110 011100 | 000000 111101 100111 111110
+   Decimal: 5      15     46     28       0      61     37     62
+   Output:  F      P      u      c        A      9      l      +
+   
+   Input data:  0x14FB9C03D9
+   Hex:     1   4    F   B    9   C     | 0   3    D   9
+   8-bit:   00010100 11111011 10011100  | 00000011 11011001
+                                                   pad with 00
+   6-bit:   000101 001111 101110 011100 | 000000 111101 100100
+   Decimal: 5      15     46     28       0      61     36
+                                                      pad with =
+   Output:  F      P      u      c        A      9      k      =
+   Input data:  0x14FB9C03
+   
+   Hex:     1   4    F   B    9   C     | 0   3
+   8-bit:   00010100 11111011 10011100  | 00000011
+                                          pad with 0000
+   6-bit:   000101 001111 101110 011100 | 000000 110000
+   Decimal: 5      15     46     28       0      48
+                                               pad with =      =
+   Output:  F      P      u      c        A      w      =      =
+```
+:Compression Algorithms:
+
+       ID           Algorithm
+       --           ---------
+       0          - Uncompressed
+       1          - ZIP [RFC1951]
+       2          - ZLIB [RFC1950]
+       3          - BZip2 [BZ2]
+       100 to 110 - Private/Experimental algorithm
+
+   Implementations MUST implement uncompressed data.  Implementations
+   SHOULD implement ZIP.  Implementations MAY implement any other
+   algorithm.
+
+9.4.  Hash Algorithms
+
+      ID           Algorithm                             Text Name
+      --           ---------                             ---------
+      1          - MD5 [HAC]                             "MD5"
+      2          - SHA-1 [FIPS180]                       "SHA1"
+      3          - RIPE-MD/160 [HAC]                     "RIPEMD160"
+      4          - Reserved
+      5          - Reserved
+      6          - Reserved
+      7          - Reserved
+      8          - SHA256 [FIPS180]                      "SHA256"
+      9          - SHA384 [FIPS180]                      "SHA384"
+      10         - SHA512 [FIPS180]                      "SHA512"
+      11         - SHA224 [FIPS180]                      "SHA224"
+
+OpenPGP Messages:
+   An OpenPGP message is a packet or sequence of packets that
+   corresponds to the following grammatical rules (comma represents
+   sequential composition, and vertical bar separates alternatives):
+
+   OpenPGP Message :- Encrypted Message | Signed Message |
+                      Compressed Message | Literal Message.|
+   Compressed Message :- Compressed Data Packet.|
+   Literal Message :- Literal Data Packet.
+   ESK :- Public-Key Encrypted Session Key Packet |
+          Symmetric-Key Encrypted Session Key Packet.
+   ESK Sequence :- ESK | ESK Sequence, ESK.
+   Encrypted Data :- Symmetrically Encrypted Data Packet |
+         Symmetrically Encrypted Integrity Protected Data Packet
+
+
+
+
+Callas, et al               Standards Track                    [Page 69]
+RFC 4880                 OpenPGP Message Format            November 2007
+
+
+   Encrypted Message :- Encrypted Data | ESK Sequence, Encrypted Data.
+
+   One-Pass Signed Message :- One-Pass Signature Packet,
+               OpenPGP Message, Corresponding Signature Packet.
+
+   Signed Message :- Signature Packet, OpenPGP Message |
+               One-Pass Signed Message.
+
+   > In addition, decrypting a Symmetrically Encrypted Data packet or a
+   Symmetrically Encrypted Integrity Protected Data packet as well as
+   decompressing a Compressed Data packet must yield a valid OpenPGP
+   Message.
+
+:RSA Public Key:
+             
+              [Revocation Self Signature]
+               User ID [Signature ...]
+              [User ID [Signature ...] ...]
+           Primary-Key
+              [Revocation Self Signature]
+              [Direct Key Signature...]
+               User ID [Signature ...]
+              [User ID [Signature ...] ...]
+              [User Attribute [Signature ...] ...]
+              [[Subkey [Binding-Signature-Revocation]
+                      Primary-Key-Binding-Signature] ...]
+DSA key:
+
+   a.1) 0x99 (1 octet)
+
+   a.2) high-order length octet of (b)-(e) (1 octet)
+
+
+
+Callas, et al               Standards Track                    [Page 71]
+RFC 4880                 OpenPGP Message Format            November 2007
+
+
+  
+     a.3) low-order length octet of (b)-(e) (1 octet)
+
+     b) version number = 4 (1 octet);
+
+     c) timestamp of key creation (4 octets);
+
+     d) algorithm (1 octet): 17 = DSA (example);
+
+     e) Algorithm-specific fields.
+
+   :Algorithm-Specific Fields for DSA keys (example):
+
+   e.1) MPI of DSA prime p;
+
+   e.2) MPI of DSA group order q (q is a prime divisor of p-1);
+
+   e.3) MPI of DSA group .generator g;
+EME-PKCS1-v1_5-ENCODE
+
+  : Input:
+
+   k  = the length in octets of the key modulus
+
+   M  = message to be encoded, an octet string of length mLen, where
+        mLen <= k - 11
+
+   :Output:
+
+   EM = encoded message, an octet string of length k
+
+   Error:   "message too long"
+
+     1. Length checking: If mLen > k - 11, output "message too long" and
+        stop.
+
+     2. Generate an octet string PS of length k - mLen - 3 consisting of
+        pseudo-randomly generated nonzero octets.  The length of PS will
+        be at least eight octets.
+
+     3. Concatenate PS, the message M, and other padding to form an
+        encoded message EM of length k octets as
+
+        EM = 0x00 || 0x02 || PS || 0x00 || M.
+
+     4. Output EM.
+
+13.1.2.  EME-PKCS1-v1_5-DECODE
+
+   Input:
+
+   EM = encoded message, an octet string
+
+   Output:
+
+   M  = message, an octet string
+
+   Error:   "decryption error"
+
+   To decode an EME-PKCS1_v1_5 message, separate the encoded message EM
+   into an octet string PS consisting of nonzero octets and a message M
+   as follows
+
+     EM = 0x00 || 0x02 || PS || 0x00 || M.
+
+   SHA-512 hash
+
+     * 2048-bit key, 224-bit q, SHA-224, SHA-256, SHA-384, or SHA-512
+       hash
+
+     * 2048-bit key, 256-bit q, SHA-256, SHA-384, or SHA-512 hash
+
+     * 3072-bit key, 256-bit q, SHA-256, SHA-384, or SHA-512 hash
+```c
+RSAEP ((n, e), m)
+
+
+   Input:
+   (n, e)   RSA public key
+   m        message representative, an integer between 0 and n - 1
+
+   Output:
+   c        ciphertext representative, an integer between 0 and n - 1
+
+   Error: "message representative out of range"
+
+   Assumption: RSA public key (n, e) is valid
+
+   Steps:
+
+   1. If the message representative m is not between 0 and n - 1, output
+      "message representative out of range" and stop.
+
+   2. Let c = m^e mod n.
+
+   3. Output c.
+```
+5.1.2   RSADP
+```c
+   RSADP (K, c)
+
+   Input:
+   K        RSA private key, where K has one of the following forms:
+            - a pair (n, d)
+            - a quintuple (p, q, dP, dQ, qInv) and a possibly empty
+              sequence of triplets (r_i, d_i, t_i), i = 3, ..., u
+   c        ciphertext representative, an integer between 0 and n - 1
+
+   Output:
+   m        message representative, an integer between 0 and n - 1
+
+   Error: "ciphertext representative out of range"
+
+   Assumption: RSA private key K is valid
+
+```
+
+
+
+
+
+
+
+
+Jonsson & Kaliski            Informational                     [Page 11]
+RFC 3447        PKCS #1: RSA Cryptography Specifications   February 2003
+
+
+   Steps:
+
+   1. If the ciphertext representative c is not between 0 and n - 1,
+      output "ciphertext representative out of range" and stop.
+
+   2. The message representative m is computed as follows.
+```
+      a. If the first form (n, d) of K is used, let m = c^d mod n.
+
+      b. If the second form (p, q, dP, dQ, qInv) and (r_i, d_i, t_i)
+         of K is used, proceed as follows:
+
+         i.    Let m_1 = c^dP mod p and m_2 = c^dQ mod q.
+
+         ii.   If u > 2, let m_i = c^(d_i) mod r_i, i = 3, ..., u.
+
+         iii.  Let h = (m_1 - m_2) * qInv mod p.
+
+         iv.   Let m = m_2 + q * h.
+
+         v.    If u > 2, let R = r_1 and for i = 3 to u do
+
+                  1. Let R = R * r_(i-1).
+
+                  2. Let h = (m_i - m) * t_i mod r_i.
+                  3. Let m = m + R * h.
+```
+RSASP1
+```cc
+   RSASP1 (K, m)
+
+   Input:
+   K        RSA private key, where K has one of the following forms:
+            - a pair (n, d)
+            - a quintuple (p, q, dP, dQ, qInv) and a (possibly empty)
+              sequence of triplets (r_i, d_i, t_i), i = 3, ..., u
+   m        message representative, an integer between 0 and n - 1
+
+   Output:
+   s        signature representative, an integer between 0 and n - 1
+
+   Error: "message representative out of range"
+
+   Assumption: RSA private key K is valid
+```
+   :Steps:
+
+   1. If the message representative m is not between 0 and n - 1,
+      output "message representative out of range" and stop.
+
+   2. The signature representative s is computed as follows.
+```crc
+      a. If the first form (n, d) of K is used, let s = m^d mod n.
+
+         b. If the second form (p, q, dP, dQ, qInv) and (r_i, d_i, t_i)
+         of K is used, proceed as follows:
+
+         i.    Let s_1 = m^dP mod p and s_2 = m^dQ mod q.
+
+         ii.   If u > 2, let s_i = m^(d_i) mod r_i, i = 3, ..., u.
+
+         iii.  Let h = (s_1 - s_2) * qInv mod p.
+
+         iv.   Let s = s_2 + q * h.
+
+         v.    If u > 2, let R = r_1 and for i = 3 to u do
+
+                  1. Let R = R * r_(i-1).
+```
+
+
+
+  PKCS #1:  RSA Cryptography Specifications   February 2003
+
+
+                  2. Let h = (s_i - s) * t_i mod r_i.
+
+                  3. Let s = s + R * h.
+                  RSAES-OAEP-ENCRYPT ((n, e), M, L)
+
+: Options:
+   Hash:     hash function (hLen denotes the length in octets of the hash
+            function output)
+   MGF:      mask generation function
+
+   Input:
+   (n, e)   recipient's RSA public key (k denotes the length in octets
+            of the RSA modulus n)
+   M        message to be encrypted, an octet string of length mLen,
+            where mLen <= k - 2hLen - 2
+   L        optional label to be associated with the message; the
+            default value for L, if L is not provided, is the empty
+            string
+
+   Output:
+   C        ciphertext, an octet string of length k
+
+   Errors:  "message too long"; "label too long"
+
+   Assumption: RSA public key (n, e) is valid
+
+   Steps:
+
+   1. Length checking:
+
+      a. If the length of L is greater than the input limitation for the
+         hash function (2^61 - 1 octets for SHA-1), output "label too
+         long" and stop.
+
+      b. If mLen > k - 2hLen - 2, output "message too long" and stop.
+
+
+
+
+Jonsson & Kaliski            Informational                     [Page 19]
+RFC 3447        PKCS #1: RSA Cryptography Specifications   February 2003
+
+
+   2. EME-OAEP encoding (see Figure 1 below):
+
+      a. If the label L is not provided, let L be the empty string. Let
+         lHash = Hash(L), an octet string of length hLen (see the note
+         below).
+
+      b. Generate an octet string PS consisting of k - mLen - 2hLen - 2
+         zero octets.  The length of PS may be zero.
+
+      c. Concatenate lHash, PS, a single octet with hexadecimal value
+         0x01, and the message M to form a data block DB of length k -
+         hLen - 1 octets as
+
+            DB = lHash || PS || 0x01 || M.
+
+      d. Generate a random octet string seed of length hLen.
+
+      e. Let dbMask = MGF(seed, k - hLen - 1).
+
+      f. Let maskedDB = DB \xor dbMask.
+
+      g. Let seedMask = MGF(maskedDB, hLen).
+
+      h. Let maskedSeed = seed \xor seedMask.
+
+      i. Concatenate a single octet with hexadecimal value 0x00,
+         maskedSeed, and maskedDB to form an encoded message EM of
+         length k octets as
+
+            EM = 0x00 || maskedSeed || maskedDB.
+
+   :3. RSA encryption:
+
+      a. Convert the encoded message EM to an integer message
+         representative m (see Section 4.2):
+
+            m = OS2IP (EM).
+
+      b. Apply the RSAEP encryption primitive (Section 5.1.1) to the RSA
+         public key (n, e) and the message representative m to produce
+         an integer ciphertext representative c:
+
+            c = RSAEP ((n, e), m).
+
+      c. Convert the ciphertext representative c to a ciphertext C of
+         length k octets (see Section 4.1):
+
+            C = I2OSP (c, k).
+
+
+
+Jonsson & Kaliski            Informational                     [Page 20]
+RFC 3447        PKCS #1: RSA Cryptography Specifications   February 2003
+
+
+   4. Output the ciphertext C.
+
+   Note.  If L is the empty string, the corresponding hash value lHash
+   has the following hexadecimal representation for different choices of
+   
+   Hash:
+
+   SHA-1:   (0x)da39a3ee 5e6b4b0d 3255bfef 95601890 afd80709
+   SHA-256: (0x)e3b0c442 98fc1c14 9afbf4c8 996fb924 27ae41e4 649b934c
+                a495991b 7852b855
+   SHA-384: (0x)38b060a7 51ac9638 4cd9327e b1b1e36a 21fdb711 14be0743
+                4c0cc7bf 63f6e1da 274edebf e76f65fb d51ad2f1 4898b95b
+   SHA-512: (0x)cf83e135 7eefb8bd f1542850 d66d8007 d620e405 0b5715dc
+                83f4a921 d36ce9ce 47d0d13c 5d85f2b0 ff8318d2 877eec2f
+                63b931bd 47417a81 a538327a f927da3e
+
+   __________________________________________________________________
+
+                             +----------+---------+-------+
+                        DB = |  lHash   |    PS   |   M   |
+                             +----------+---------+-------+
+                                            |
+                  +----------+              V
+                  |   seed   |--> MGF ---> xor
+                  +----------+              |
+                        |                   |
+               +--+     V                   |
+               |00|    xor <----- MGF <-----|
+               +--+     |                   |
+                 |      |                   |
+                 V      V                   V
+               +--+----------+----------------------------+
+         EM =  |00|maskedSeed|          maskedDB          |
+               +--+----------+----------------------------+
+   __________________________________________________________________
+
+   Figure 1: EME-OAEP encoding operation.  lHash is the hash of the
+   optional label L.  Decoding operation follows reverse steps to
+   recover M and verify lHash and PS.
+
+7.1.2 Decryption operation
+
+   RSAES-OAEP-DECRYPT (K, C, L)
+
+   Options:
+   Hash     hash function (hLen denotes the length in octets of the hash
+            function output)
+   MGF      mask generation function
+
+
+
+
+Jonsson & Kaliski            Informational                     [Page 21]
+RFC 3447        PKCS #1: RSA Cryptography Specifications   February 2003
+
+
+   :Input:
+   K        recipient's RSA private key (k denotes the length in octets
+            of the RSA modulus n)
+   C        ciphertext to be decrypted, an octet string of length k,
+            where k = 2hLen + 2
+   L        optional label whose association with the message is to be
+            verified; the default value for L, if L is not provided, is
+            the empty string
+
+   Output:
+   M        message, an octet string of length mLen, where mLen <= k -
+            2hLen - 2
+
+   Error: "decryption error"
+
+   Steps::
+
+ 1. Length checking
+
+      a. If the length of L is greater than the input limitation for the
+         hash function (2^61 - 1 octets for SHA-1), output "decryption
+         error" and stop.
+
+      b. If the length of the ciphertext C is not k octets, output
+         "decryption error" and stop.
+
+      c. If k < 2hLen + 2, output "decryption error" and stop.
+
+   2.    RSA decryption:
+
+      a. Convert the ciphertext C to an integer ciphertext
+         representative c (see Section 4.2):
+
+            c = OS2IP (C).
+
+         b. Apply the RSADP decryption primitive (Section 5.1.2) to the
+         RSA private key K and the ciphertext representative c to
+         produce an integer message representative m:
+
+            m = RSADP (K, c).
+
+         If RSADP outputs "ciphertext representative out of range"
+         (meaning that c >= n), output "decryption error" and stop.
+
+      c. Convert the message representative m to an encoded message EM
+         of length k octets (see Section 4.1):
+
+            EM = I2OSP (m, k).
+
+
+
+Jonsson & Kaliski            Informational                     [Page 22]
+RFC 3447        PKCS #1: RSA Cryptography Specifications   February 2003
+
+
+  : 3. EME-OAEP decoding:
+
+      a. If the label L is not provided, let L be the empty string. Let
+         lHash = Hash(L), an octet string of length hLen (see the note
+         in Section 7.1.1).
+
+      b. Separate the encoded message EM into a single octet Y, an octet
+         string maskedSeed of length hLen, and an octet string maskedDB
+         of length k - hLen - 1 as
+
+            EM = Y || maskedSeed || maskedDB.
+
+      c. Let seedMask = MGF(maskedDB, hLen).
+
+      d. Let seed = maskedSeed \xor seedMask.
+
+      e. Let dbMask = MGF(seed, k - hLen - 1).
+
+      f. Let DB = maskedDB \xor dbMask.
+
+      g. Separate DB into an octet string lHash' of length hLen, a
+         (possibly empty) padding string PS consisting of octets with
+         hexadecimal value 0x00, and a message M as
+
+            DB = lHash' || PS || 0x01 || M.
+
