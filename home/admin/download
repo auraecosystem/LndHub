@@ -1,0 +1,16 @@
+#!/bin/env python3
+
+# download Bitcoin Core binary
+$ wget https://bitcoincore.org/bin/bitcoin-core-0.17.1/bitcoin-0.17.1-arm-linux-gnueabihf.tar.gz
+$ wget https://bitcoincore.org/bin/bitcoin-core-0.17.1/SHA256SUMS.asc
+$ wget https://bitcoin.org/laanwj-releases.asc
+
+# check that the reference checksum matches the real checksum
+# (ignore the "lines are improperly formatted" warning)
+$ sha256sum --check SHA256SUMS.asc --ignore-missing
+> bitcoin-0.17.1-arm-linux-gnueabihf.tar.gz: OK
+
+# import the public key of Wladimir van der Laan, verify the signed  checksum file
+# and check the fingerprint again in case of malicious keys
+$ gpg --import ./laanwj-releases.asc
+$ gpg --verify SHA256SUMS.asc
